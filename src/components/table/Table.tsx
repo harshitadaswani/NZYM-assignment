@@ -1,55 +1,66 @@
 import React, { useMemo } from "react";
-import { useTable } from "react-table";
+import { useTable, Column } from "react-table";
 import { IPerson } from "./TableTypes";
+import "../../index.css";
 
 type Props = {
   data: IPerson[];
 };
 
 export function Table(props: Props) {
-  // console.log(props);
   const data = useMemo(() => props.data, [props.data]);
-  console.log(data);
-  const columns = useMemo(
+  const columns: Column<IPerson>[] = useMemo(
     () => [
       {
         Header: "Id",
-        accesor: "id",
+        accessor: "id",
       },
       {
         Header: "Avatar",
-        accesor: "image",
+        accessor: "image",
+        Cell: (tableProps) => (
+          <img
+            className="br-full"
+            src={tableProps.row.original.image}
+            width={50}
+            alt={
+              tableProps.row.original.firstname.charAt(0) +
+              tableProps.row.original.lastname.charAt(0)
+            }
+          />
+        ),
       },
       {
         Header: "First Name",
-        accesor: "firstname",
+        accessor: "firstname",
       },
       {
         Header: "Last Name",
-        accesor: "lastName",
+        accessor: "lastname",
       },
       {
         Header: "Gender",
-        accesor: "gender",
+        accessor: "gender",
       },
       {
         Header: "Age",
-        accesor: "birthday",
+        accessor: "birthday",
       },
       {
         Header: "Contact",
-        accesor: "phone",
+        accessor: "phone",
       },
     ],
     []
   );
+
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
       data,
     });
   return (
-    <table {...getTableProps()}>
+    <table className="border" {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
@@ -65,8 +76,11 @@ export function Table(props: Props) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                console.log(cell);
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
+                return (
+                  <td className="border m-0" {...cell.getCellProps()}>
+                    {cell.render("Cell")}
+                  </td>
+                );
               })}
             </tr>
           );
