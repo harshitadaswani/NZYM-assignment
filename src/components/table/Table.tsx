@@ -8,7 +8,19 @@ type Props = {
 };
 
 export function Table(props: Props) {
+  const ageFromDOB: any = (dateofBirth: string) => {
+    const today = new Date();
+    const birthDate = new Date(dateofBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const month = today.getMonth() - birthDate.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const data = useMemo(() => props.data, [props.data]);
+
   const columns: Column<IPerson>[] = useMemo(
     () => [
       {
@@ -45,6 +57,9 @@ export function Table(props: Props) {
       {
         Header: "Age",
         accessor: "birthday",
+        Cell: (tableProps) => (
+          <div>{ageFromDOB(tableProps.row.original.birthday)}</div>
+        ),
       },
       {
         Header: "Contact",
@@ -59,6 +74,7 @@ export function Table(props: Props) {
       columns,
       data,
     });
+
   return (
     <table className="border" {...getTableProps()}>
       <thead>
