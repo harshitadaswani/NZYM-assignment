@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useTable, Column } from "react-table";
+import { useTable, Column, useSortBy } from "react-table";
 import { IPerson } from "./TableTypes";
 import "../../index.css";
 
@@ -70,10 +70,13 @@ export function Table(props: Props) {
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data,
-    });
+    useTable(
+      {
+        columns,
+        data,
+      },
+      useSortBy
+    );
 
   return (
     <table className="border" {...getTableProps()}>
@@ -81,7 +84,12 @@ export function Table(props: Props) {
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render("Header")}
+                <span>
+                  {column.isSorted ? (column.isSortedDesc ? "🔽" : "🔼") : ""}
+                </span>
+              </th>
             ))}
           </tr>
         ))}
