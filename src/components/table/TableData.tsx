@@ -44,7 +44,9 @@ export function TableData() {
 
   return (
     <>
-      <div>{loader && <div className="txt-center txt-m">Loading</div>}</div>
+      <div>
+        {loader && <div className="txt-center txt-m p-xs m-xs">Loading</div>}
+      </div>
       {!loader && (
         <div className="txt-center txt-m m-xs p-xs">
           <label>
@@ -64,7 +66,9 @@ export function TableData() {
           </label>
         </div>
       )}
-      {!loader && <Table data={data} />};
+      <div className="m-auto">
+        {!loader && <Table data={data} />};
+      </div>
     </>
   );
 }
